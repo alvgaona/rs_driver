@@ -18,7 +18,7 @@ endif()
 #=============================
 #  Compile Features
 #=============================
-option(DISABLE_PCAP_PARSE         "Disable PCAP file parse" OFF) 
+option(DISABLE_PCAP_PARSE         "Disable PCAP file parse" OFF)
 option(ENABLE_TRANSFORM           "Enable transform functions" OFF)
 
 option(ENABLE_MODIFY_RECVBUF       "Enable modify size of RCVBUF" OFF)
@@ -129,7 +129,9 @@ else()
     include_directories(${PCAP_INCLUDE_DIR})
     list(APPEND EXTERNAL_LIBS ${PCAP_LIBRARY})
   else()
-    list(APPEND EXTERNAL_LIBS pcap)
+    find_library(PCAP_LIBRARY pcap REQUIRED)
+    include_directories(${PCAP_INCLUDE_DIR})
+    list(APPEND EXTERNAL_LIBS ${PCAP_LIBRARY})
   endif(WIN32)
 
 endif(${DISABLE_PCAP_PARSE})
@@ -197,15 +199,15 @@ endif(${COMPILE_TESTS})
 
 #========================
 #  Cmake
-#========================  
+#========================
 configure_file(
   ${DRIVER_CMAKE_ROOT}/rs_driverConfig.cmake.in
-  ${DRIVER_CMAKE_ROOT}/rs_driverConfig.cmake 
+  ${DRIVER_CMAKE_ROOT}/rs_driverConfig.cmake
   @ONLY)
 
 configure_file(
   ${DRIVER_CMAKE_ROOT}/rs_driverConfigVersion.cmake.in
-  ${DRIVER_CMAKE_ROOT}/rs_driverConfigVersion.cmake 
+  ${DRIVER_CMAKE_ROOT}/rs_driverConfigVersion.cmake
   @ONLY)
 
 configure_file (
@@ -243,4 +245,3 @@ if(UNIX AND ${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
   endif(NOT TARGET uninstall)
 
 endif(UNIX AND ${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
-
